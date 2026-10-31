@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>New Life Göteborg: Website Plan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #ffffff;
+    --ink: #0d0d0d;
+    --muted: #4a4f55;
+    --tint: #f1f5f5;
+    --accent: #0f4f55;
+    --blue: #3d5a8a;
+    --line: #d5dddd;
+    --mark: #cfe6e3;
+    --note-bg: #eef3f7;
+    --display: "Prospectus", Georgia, serif;
+    --mono: "Space Mono", "Courier New", monospace;
+    color-scheme: light;
+  }
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+  body { background: var(--bg); color: var(--ink); font-family: var(--mono); font-size: 16px; line-height: 1.75; overflow: hidden; }
+  button { font: inherit; }
+
+  .deck { position: relative; height: 100%; }
+  .slide {
+    position: absolute; inset: 0; overflow-y: auto;
+    padding: 4.5rem clamp(1.5rem, 7vw, 7rem) 7rem;
+    opacity: 0; visibility: hidden; transform: translateX(24px);
+    transition: opacity .35s ease, transform .35s ease, visibility .35s;
+  }
+  .slide.active { opacity: 1; visibility: visible; transform: none; }
+  .slide.before { transform: translateX(-24px); }
+  .inner { max-width: 1040px; margin: 0 auto; }
+  @media (prefers-reduced-motion: reduce) { .slide { transition: none; transform: none; } }
+
+  h1, h2, h3 { font-family: var(--display); font-weight: 700; color: var(--ink); line-height: 1.12; margin: 0 0 1rem; }
+  h1 { font-size: clamp(1.9rem, 4.6vw, 3.4rem); letter-spacing: .14em; text-transform: uppercase; max-width: none; }
+  h2 { font-size: clamp(2.2rem, 5vw, 3.6rem); max-width: 20ch; letter-spacing: -.01em; }
+  h3 { font-size: 1.3rem; margin-bottom: .5rem; }
+  p { margin: 0 0 1rem; color: var(--muted); }
+  .lead { font-size: 1.05rem; color: var(--ink); max-width: 38em; margin-bottom: 1.8rem; }
+
+  .split { display: grid; grid-template-columns: 1.1fr .9fr; gap: 3rem; align-items: center; }
+  .split svg { width: 100%; height: auto; display: block; }
+  .art { background: var(--tint); border-radius: 4px; padding: 1.5rem; }
+
+  /* Cover: dark spotlight hero, like the church homepage */
+  .cover {
+    background:
+      radial-gradient(ellipse 35% 45% at 62% 40%, rgba(120,200,205,.55), transparent 70%),
+      linear-gradient(160deg, #3f6b80 0%, #1d3350 55%, #0f1d30 100%);
+    color: #ffffff;
+  }
+  .cover h1 { color: #ffffff; text-align: left; font-size: clamp(2rem, 5vw, 3.6rem); margin-bottom: 1rem; }
+  .cover .lead { color: #e7eff5; }
+  .cover .date { font-size: .85rem; letter-spacing: .12em; text-transform: uppercase; color: #c9d7e2; margin: 1.2rem 0 0; }
+  .cover-label { font-size: .85rem; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: #ffffff; margin: 2.2rem 0 .8rem; }
+  .cover .art { background: rgba(255,255,255,.96); }
+
+  .tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: .5rem; }
+  .tile {
+    display: grid; grid-template-columns: 3rem 1fr; gap: .9rem; align-items: start; text-align: left; cursor: pointer;
+    border: 0; background: #ffffff; color: var(--ink); border-radius: 4px; padding: 1.2rem 1.3rem;
+    transition: background .2s;
+  }
+  .tile:hover { background: #dfeeed; }
+  .tile:focus-visible { outline: 3px solid #7fd0c8; outline-offset: 3px; }
+  .tile .ic { width: 3rem; height: 3rem; border-radius: 50%; background: var(--accent); display: grid; place-items: center; }
+  .tile .ic svg { width: 1.5rem; height: 1.5rem; }
+  .tile .t { display: block; font-family: var(--display); font-weight: 700; font-size: 1.2rem; margin-bottom: .2rem; }
+  .tile .d { display: block; color: var(--muted); font-size: .85rem; line-height: 1.5; }
+
+  /* Content */
+  .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 1.5rem; }
+  .card { background: var(--tint); border-radius: 4px; padding: 1.5rem 1.6rem; border-top: 0; }
+  .card p { margin-bottom: .6rem; font-size: .92rem; }
+  .card p:last-child { margin-bottom: 0; }
+  .card .why { color: var(--ink); font-weight: 700; }
+  .tag {
+    display: inline-block; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 700;
+    color: #ffffff; background: var(--accent); border-radius: 999px; padding: .2rem .8rem; margin-bottom: .8rem;
+  }
+  .note { margin-top: 1.5rem; background: var(--note-bg); color: var(--ink); border-radius: 4px; padding: 1.3rem 1.6rem; font-size: .95rem; }
+  .note strong { display: block; margin-bottom: .25rem; font-family: var(--display); font-size: 1.1rem; }
+  .note p { color: var(--ink); margin: 0; }
+  .note.neutral { background: var(--tint); }
+  .note.neutral p { color: var(--muted); }
+
+  /* Key terms and decision points */
+  mark.key { background: var(--mark); color: var(--ink); font-weight: 700; padding: 0 .25em; border-radius: 2px; }
+  .decision {
+    margin-top: 1.5rem; border: 2px solid var(--accent); border-radius: 4px; padding: 1.2rem 1.5rem;
+    background: var(--bg); display: flex; gap: 1rem; align-items: flex-start;
+  }
+  .decision .badge {
+    flex: none; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; color: #ffffff; background: var(--accent);
+    border-radius: 999px; padding: .3rem .8rem; margin-top: .15rem; white-space: nowrap;
+  }
+  .decision p { margin: 0; color: var(--ink); font-size: .95rem; }
+
+  /* Nav: black pill buttons, like the church site */
+  .nav {
+    position: fixed; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: space-between;
+    gap: 1rem; padding: .9rem clamp(1rem, 5vw, 3rem); background: var(--bg); border-top: 1px solid var(--line);
+  }
+  .nav button {
+    color: #ffffff; background: #111111; border: 0; border-radius: 999px;
+    padding: .6rem 1.3rem; cursor: pointer; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 700;
+  }
+  .nav button:hover:not(:disabled) { background: var(--accent); }
+  .nav button:disabled { opacity: .3; cursor: default; }
+  .nav button:focus-visible, .tile:focus-visible, .dots button:focus-visible { outline: 3px solid #7fd0c8; outline-offset: 2px; }
+  .dots { display: flex; gap: .55rem; }
+  .dots button { width: 11px; height: 11px; border-radius: 50%; border: 0; background: var(--line); padding: 0; cursor: pointer; }
+  .dots button[aria-current="true"] { background: var(--accent); }
+  .counter { color: var(--muted); font-size: .8rem; min-width: 4.5rem; text-align: center; letter-spacing: .08em; }
+
+  @media (max-width: 860px) {
+    .split { grid-template-columns: 1fr; gap: 1.5rem; }
+    .cards, .tiles { grid-template-columns: 1fr; }
+    body { font-size: 15px; }
+    .counter { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- 0. Cover -->
+  <section class="slide active cover" data-title="Start">
+    <div class="inner">
+      <div class="split">
+        <div>
+          <h1>New Life Church Göteborg</h1>
+          <p class="lead">A simple plan for our website: how we would build it, where it would live, and which web address people would type in.</p>
+          <p class="date">Core Launch Team • October 2026</p>
+        </div>
+        <div class="art" aria-hidden="true">
+          <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img">
+<defs>
+  <linearGradient id="skyC" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bfe8e3"/><stop offset="1" stop-color="#f3fbfa"/></linearGradient>
+  <linearGradient id="waterC" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7fc4bd"/><stop offset="1" stop-color="#2f8f87"/></linearGradient>
+</defs>
+<rect width="400" height="300" fill="url(#skyC)"/>
+<circle cx="318" cy="78" r="30" fill="#f4b740" opacity=".9"/>
+<g fill="#7aa9a4">
+  <rect x="20" y="150" width="34" height="90"/><rect x="58" y="128" width="28" height="112"/>
+  <rect x="90" y="142" width="40" height="98"/><rect x="134" y="118" width="22" height="122"/>
+</g>
+<g fill="#fff" opacity=".7">
+  <rect x="26" y="162" width="5" height="5"/><rect x="36" y="162" width="5" height="5"/><rect x="26" y="180" width="5" height="5"/>
+  <rect x="64" y="144" width="5" height="5"/><rect x="74" y="144" width="5" height="5"/><rect x="64" y="162" width="5" height="5"/>
+  <rect x="96" y="158" width="5" height="5"/><rect x="108" y="158" width="5" height="5"/><rect x="96" y="176" width="5" height="5"/>
+</g>
+<g fill="#14213d">
+  <rect x="200" y="112" width="8" height="110"/><rect x="290" y="112" width="8" height="110"/>
+  <rect x="194" y="128" width="20" height="4"/><rect x="284" y="128" width="20" height="4"/>
+</g>
+<path d="M20 222 H380" stroke="#14213d" stroke-width="5"/>
+<path d="M204 112 Q 250 178 294 112" fill="none" stroke="#14213d" stroke-width="2.5"/>
+<path d="M0 118 Q 204 110 204 112 M294 112 Q 300 110 400 118" fill="none" stroke="#14213d" stroke-width="2"/>
+<g>
+  <rect x="330" y="182" width="48" height="40" fill="#0f4f55"/>
+  <polygon points="326,182 354,150 382,182" fill="#0f4f55"/>
+  <rect x="352" y="120" width="4" height="30" fill="#0f4f55"/>
+  <rect x="346" y="126" width="16" height="4" fill="#0f4f55"/>
+  <rect x="348" y="196" width="10" height="26" fill="#d9f1ee"/>
+  <rect x="364" y="196" width="10" height="16" fill="#d9f1ee"/>
+</g>
+<rect y="222" width="400" height="78" fill="url(#waterC)"/>
+<g stroke="#d9f1ee" stroke-width="2" opacity=".5" fill="none">
+  <path d="M20 245 q 15 -6 30 0 t 30 0"/><path d="M130 262 q 15 -6 30 0 t 30 0"/><path d="M250 250 q 15 -6 30 0 t 30 0"/>
+</g></svg>
+        </div>
+      </div>
+      <p class="cover-label">What we will cover</p>
+      <div class="tiles">
+        <button class="tile" type="button" data-go="1">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#0f4f55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 9h18M8 20h8"/></svg></span>
+          <span><span class="t">Building the website</span><span class="d">A tool that volunteers can keep up, and how we would share sermons as audio.</span></span>
+        </button>
+        <button class="tile" type="button" data-go="2">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#0f4f55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/><path d="M7 7h.01M7 18h.01"/></svg></span>
+          <span><span class="t">Where the website lives</span><span class="d">Swedish hosting, and how we keep pages fast for visitors.</span></span>
+        </button>
+        <button class="tile" type="button" data-go="3">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#0f4f55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg></span>
+          <span><span class="t">A simpler, free option</span><span class="d">What it would cost us, and why we would still choose the first plan.</span></span>
+        </button>
+        <button class="tile" type="button" data-go="4">
+          <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#0f4f55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3.5 3 14.5 0 18M12 3c-3 3.5-3 14.5 0 18"/></svg></span>
+          <span><span class="t">Choosing the web address</span><span class="d">Decided: one main church page that links to each location's own site.</span></span>
+        </button>
+      </div>
+      <div class="decision"><span class="badge">Decision</span><p>Overall: three areas are still open for the team, and the web address has already been decided by our pastor.</p></div>
+    </div>
+  </section>
+
+  <!-- 1. Building the website -->
+  <section class="slide" data-title="Building the website">
+    <div class="inner">
+      <div class="split">
+        <div>
+          <h2>A website our volunteers can look after</h2>
+          <p class="lead" style="margin-bottom:0">We would use <mark class="key">WordPress</mark>, one of the most common tools for building websites, with <mark class="key">Elementor Pro</mark>, a visual editor where you design pages by moving blocks around.</p>
+        </div>
+        <div class="art" aria-hidden="true">
+          <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img">
+<defs><linearGradient id="heroW" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0f4f55"/><stop offset="1" stop-color="#5eb8ae"/></linearGradient></defs>
+<rect x="20" y="30" width="360" height="200" rx="12" fill="#ffffff" stroke="#c9d8d5" stroke-width="2"/>
+<rect x="20" y="30" width="360" height="24" rx="12" fill="#d9f1ee"/>
+<rect x="20" y="44" width="360" height="10" fill="#d9f1ee"/>
+<circle cx="36" cy="42" r="4" fill="#0f4f55"/><circle cx="48" cy="42" r="4" fill="#f4b740"/><circle cx="60" cy="42" r="4" fill="#9fb3c8"/>
+<rect x="36" y="66" width="328" height="84" rx="8" fill="url(#heroW)"/>
+<circle cx="326" cy="92" r="12" fill="#f4b740"/>
+<path d="M36 150 L120 96 L170 128 L220 92 L364 150 Z" fill="#0b5c56" opacity=".55"/>
+<rect x="50" y="162" width="130" height="10" rx="5" fill="#14213d"/>
+<rect x="50" y="180" width="200" height="6" rx="3" fill="#c9d8d5"/>
+<rect x="50" y="194" width="170" height="6" rx="3" fill="#c9d8d5"/>
+<rect x="250" y="160" width="84" height="26" rx="13" fill="#f4b740"/>
+<rect x="36" y="206" width="110" height="14" rx="7" fill="#0f4f55" opacity=".4"/>
+<rect x="150" y="206" width="90" height="14" rx="7" fill="#eef6f5"/></svg>
+        </div>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <span class="tag">The website</span>
+          <h3>Easy to update</h3>
+          <p>Page layouts stay in place. A new volunteer can change the text and photos without knowing any code.</p>
+          <p class="why">Less need for one specific person who knows how it works.</p>
+        </div>
+        <div class="card">
+          <span class="tag">The website</span>
+          <h3>Locked design</h3>
+          <p>Settings can protect the look of the site, so editing a page cannot accidentally break its design.</p>
+          <p class="why">The site keeps looking the way we intend.</p>
+        </div>
+        <div class="card">
+          <span class="tag">Sermons and audio</span>
+          <h3>Podcasts through <mark class="key">Podbean</mark></h3>
+          <p>Sermon audio would be hosted on <mark class="key">Podbean</mark>, the same service newlife.nu already uses successfully.</p>
+          <p class="why">Audio files stay off our website, so pages load faster.</p>
+        </div>
+        <div class="card">
+          <span class="tag">Sermons and audio</span>
+          <h3>Proven, not new</h3>
+          <p>Because the setup already works for our existing church site, we know how it behaves and what it costs.</p>
+          <p class="why">Fewer surprises for the team.</p>
+        </div>
+      </div>
+      <div class="decision"><span class="badge">Decision</span><p><strong>Decision for the team:</strong> Do we approve <mark class="key">WordPress</mark> with <mark class="key">Elementor Pro</mark>, and <mark class="key">Podbean</mark> for sermon audio?</p></div>
+    </div>
+  </section>
+
+  <!-- 2. Where the website lives -->
+  <section class="slide" data-title="Where the website lives">
+    <div class="inner">
+      <div class="split">
+        <div>
+          <h2>Where the website lives, and how it stays fast</h2>
+          <p class="lead" style="margin-bottom:0">Every website is stored on a computer somewhere. That is called hosting. We would choose a company in Sweden, so the site is close to our visitors and our data stays in the country.</p>
+        </div>
+        <div class="art" aria-hidden="true">
+          <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img">
+<defs><linearGradient id="cloudH" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#d9f1ee"/></linearGradient></defs>
+<path d="M90 110 a42 42 0 0 1 66 -34 a54 54 0 0 1 102 12 a36 36 0 0 1 14 66 H118 a30 30 0 0 1 -28 -44z" fill="url(#cloudH)" stroke="#c9d8d5" stroke-width="2"/>
+<rect x="120" y="150" width="130" height="36" rx="8" fill="#14213d"/>
+<rect x="120" y="190" width="130" height="36" rx="8" fill="#14213d"/>
+<rect x="120" y="230" width="130" height="36" rx="8" fill="#14213d"/>
+<circle cx="140" cy="168" r="5" fill="#5eb8ae"/><circle cx="156" cy="168" r="5" fill="#f4b740"/>
+<circle cx="140" cy="208" r="5" fill="#5eb8ae"/><circle cx="156" cy="208" r="5" fill="#9fb3c8"/>
+<circle cx="140" cy="248" r="5" fill="#f4b740"/><circle cx="156" cy="248" r="5" fill="#9fb3c8"/>
+<rect x="172" y="162" width="66" height="8" rx="4" fill="#23345c"/>
+<rect x="172" y="202" width="66" height="8" rx="4" fill="#23345c"/>
+<rect x="172" y="242" width="66" height="8" rx="4" fill="#23345c"/>
+<path d="M312 160 l34 12 v22 c0 22 -16 36 -34 44 c-18 -8 -34 -22 -34 -44 v-22z" fill="#0f4f55"/>
+<path d="M298 198 l10 10 18 -20" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <span class="tag">Hosting option</span>
+          <h3><mark class="key">HostUp</mark></h3>
+          <p>Modern security that scans for harmful files in real time. Good performance for the price.</p>
+          <p class="why">A strong choice if budget is the main concern.</p>
+        </div>
+        <div class="card">
+          <span class="tag">Hosting option</span>
+          <h3><mark class="key">Oderland</mark></h3>
+          <p>An established Swedish provider. Each customer gets a separate account, and the site is backed up automatically.</p>
+          <p class="why">A safe, well-known choice if we want extra peace of mind.</p>
+        </div>
+        <div class="card">
+          <span class="tag">Speed and protection</span>
+          <h3>Copies close to visitors</h3>
+          <p><mark class="key">Cloudflare</mark> keeps copies of our pages at locations across Sweden, so they load quickly for everyone.</p>
+          <p class="why">Visitors get fast pages, and we pay nothing for the basic version.</p>
+        </div>
+        <div class="card">
+          <span class="tag">Speed and protection</span>
+          <h3>A shield in front of the site</h3>
+          <p><mark class="key">Cloudflare</mark> hides the real location of our server, which makes common attacks much harder.</p>
+          <p class="why">Basic protection that works in the background.</p>
+        </div>
+      </div>
+      <div class="decision"><span class="badge">Decision</span><p><strong>Decision for the team:</strong> Choose <mark class="key">HostUp</mark> for lower cost or <mark class="key">Oderland</mark> for more backups and security. Do we also use the free <mark class="key">Cloudflare</mark> plan?</p></div>
+    </div>
+  </section>
+
+  <!-- 3. Free option -->
+  <section class="slide" data-title="A simpler, free option">
+    <div class="inner">
+      <div class="split">
+        <div>
+          <h2>A free option we considered</h2>
+          <p class="lead" style="margin-bottom:0">We could also build a simple site with <mark class="key">GitHub Pages</mark>. It costs nothing, and modern AI tools can help write the pages.</p>
+        </div>
+        <div class="art" aria-hidden="true">
+          <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img">
+<rect x="20" y="28" width="360" height="244" rx="14" fill="#14213d"/>
+<rect x="20" y="28" width="360" height="26" rx="14" fill="#23345c"/>
+<rect x="20" y="42" width="360" height="12" fill="#23345c"/>
+<circle cx="36" cy="41" r="4" fill="#f4b740"/><circle cx="48" cy="41" r="4" fill="#5eb8ae"/><circle cx="60" cy="41" r="4" fill="#9fb3c8"/>
+<rect x="36" y="70" width="60" height="8" rx="4" fill="#5eb8ae"/>
+<rect x="104" y="70" width="110" height="8" rx="4" fill="#f4b740"/>
+<rect x="56" y="92" width="150" height="8" rx="4" fill="#9fb3c8"/>
+<rect x="56" y="110" width="200" height="8" rx="4" fill="#d9f1ee"/>
+<rect x="56" y="128" width="120" height="8" rx="4" fill="#9fb3c8"/>
+<rect x="56" y="146" width="170" height="8" rx="4" fill="#5eb8ae"/>
+<rect x="36" y="168" width="40" height="8" rx="4" fill="#f4b740"/>
+<rect x="56" y="186" width="130" height="8" rx="4" fill="#9fb3c8"/>
+<rect x="296" y="180" width="64" height="48" rx="24" fill="#f4b740"/>
+<text x="328" y="210" text-anchor="middle" font-family="Open Sans, Segoe UI, sans-serif" font-size="16" font-weight="700" fill="#14213d">FREE</text>
+<path d="M330 92 l5 12 12 5 -12 5 -5 12 -5 -12 -12 -5 12 -5z" fill="#5eb8ae"/></svg>
+        </div>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <span class="tag">Good points</span>
+          <h3>No hosting bill</h3>
+          <p>The site is free to run, and it is fast because it is only simple pages.</p>
+          <p class="why">Good for a basic information site.</p>
+        </div>
+        <div class="card">
+          <span class="tag">Good points</span>
+          <h3>Help from AI tools</h3>
+          <p>Someone with basic computer skills could create and change pages with AI assistance.</p>
+          <p class="why">Less technical know-how needed to start.</p>
+        </div>
+      </div>
+      <div class="note" role="note">
+        <strong>The catch</strong>
+        <p>This option cannot store information behind a login or keep a database of people, events, or sign-ups. Volunteers without technical skills would not be able to update the site easily. That rules it out for the full church website we need.</p>
+      </div>
+      <div class="decision"><span class="badge">Decision</span><p><strong>Decision for the team:</strong> Confirm that <mark class="key">GitHub Pages</mark> is not used for the main website.</p></div>
+    </div>
+  </section>
+
+  <!-- 4. Web address -->
+  <section class="slide" data-title="Choosing the web address">
+    <div class="inner">
+      <div class="split">
+        <div>
+          <h2>Our web address plan</h2>
+          <p class="lead" style="margin-bottom:0">Our pastor has chosen the main network page. Each location still has its own site, linked from the front page.</p>
+        </div>
+        <div class="art" aria-hidden="true">
+          <svg viewBox="0 0 400 300" xmlns="http://www.w3.org/2000/svg" role="img">
+<rect x="30" y="22" width="340" height="44" rx="22" fill="#ffffff" stroke="#c9d8d5" stroke-width="2"/>
+<circle cx="52" cy="44" r="6" fill="#0f4f55"/>
+<text x="68" y="50" font-family="Open Sans, Segoe UI, sans-serif" font-size="18" font-weight="600" fill="#14213d">newlifechurch.se</text>
+<rect x="30" y="86" width="340" height="190" rx="14" fill="#eef6f5"/>
+<path d="M200 160 L110 120 M200 160 L300 120 M200 160 V240" stroke="#c9d8d5" stroke-width="8" stroke-linecap="round" fill="none"/>
+<path d="M110 118 c-12 0 -20 -9 -20 -20 c0 -14 20 -34 20 -34 s20 20 20 34 c0 11 -8 20 -20 20z" fill="#f4b740"/>
+<circle cx="110" cy="98" r="7" fill="#ffffff"/>
+<path d="M300 118 c-12 0 -20 -9 -20 -20 c0 -14 20 -34 20 -34 s20 20 20 34 c0 11 -8 20 -20 20z" fill="#f4b740"/>
+<circle cx="300" cy="98" r="7" fill="#ffffff"/>
+<path d="M200 160 c-14 0 -24 -10 -24 -24 c0 -16 24 -40 24 -40 s24 24 24 40 c0 14 -10 24 -24 24z" fill="#0f4f55"/>
+<circle cx="200" cy="136" r="8" fill="#ffffff"/>
+<text x="110" y="150" text-anchor="middle" font-family="Open Sans, Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#14213d">Alvik</text>
+<text x="300" y="150" text-anchor="middle" font-family="Open Sans, Segoe UI, sans-serif" font-size="12" font-weight="600" fill="#14213d">South</text>
+<text x="200" y="256" text-anchor="middle" font-family="Open Sans, Segoe UI, sans-serif" font-size="15" font-weight="700" fill="#14213d">Göteborg</text></svg>
+        </div>
+      </div>
+      <div class="cards">
+        <div class="card">
+          <span class="tag">Considered</span>
+          <h3>One address for each location</h3>
+          <p>For example <mark class="key">newlifegoteborg.se</mark>, newlifegoteborg.nu, or newlifegoteborg.com. <mark class="key">Göteborg</mark> gets its own website, built just for the <mark class="key">Göteborg</mark> church.</p>
+          <p class="why">Easy to remember and clearly local.</p>
+        </div>
+        <div class="card">
+          <span class="tag">Chosen</span>
+          <h3>One main address for the whole church</h3>
+          <p>For example <mark class="key">newlifechurch.se</mark>. The front page welcomes people and sends them to <mark class="key">Alvik</mark>, <mark class="key">South</mark>, or <mark class="key">Göteborg</mark>, depending on where they want to go.</p>
+          <p class="why">Shows that we are one church in several places.</p>
+        </div>
+      </div>
+      <div class="note" role="note"><strong>Decided</strong><p>We will build one main church network page at newlifechurch.se. It introduces the church and links to each location's own website, including Göteborg.</p></div>
+      <div class="decision"><span class="badge">Decided</span><p><strong>Decided:</strong> Our pastor has chosen Option B. The main church page is the front door, and each location's site is linked from it.</p></div>
+    </div>
+  </section>
+
+</div>
+
+<nav class="nav" aria-label="Slide navigation">
+  <button type="button" id="prev">Back</button>
+  <div class="dots" id="dots" role="group" aria-label="Choose a section"></div>
+  <span class="counter" id="counter" aria-live="polite"></span>
+  <button type="button" id="next">Next</button>
+</nav>
+
+<script>
+  (function () {
+    var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+    var dotsWrap = document.getElementById('dots');
+    var prev = document.getElementById('prev');
+    var next = document.getElementById('next');
+    var counter = document.getElementById('counter');
+    var index = 0;
+
+    slides.forEach(function (s, i) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('aria-label', 'Go to ' + s.getAttribute('data-title'));
+      b.addEventListener('click', function () { show(i); });
+      dotsWrap.appendChild(b);
+    });
+    var dots = Array.prototype.slice.call(dotsWrap.children);
+
+    function show(i) {
+      if (i < 0 || i >= slides.length || i === index) return;
+      slides[index].classList.remove('active');
+      slides[index].classList.toggle('before', i > index);
+      slides[i].classList.remove('before');
+      slides[i].classList.add('active');
+      slides[i].scrollTop = 0;
+      index = i;
+      render();
+    }
+    function render() {
+      dots.forEach(function (d, i) { d.setAttribute('aria-current', i === index ? 'true' : 'false'); });
+      prev.disabled = index === 0;
+      next.disabled = index === slides.length - 1;
+      counter.textContent = (index + 1) + ' of ' + slides.length;
+    }
+
+    prev.addEventListener('click', function () { show(index - 1); });
+    next.addEventListener('click', function () { show(index + 1); });
+    Array.prototype.forEach.call(document.querySelectorAll('[data-go]'), function (t) {
+      t.addEventListener('click', function () { show(parseInt(t.getAttribute('data-go'), 10)); });
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'ArrowRight' || e.key === 'PageDown') { e.preventDefault(); show(index + 1); }
+      if (e.key === 'ArrowLeft' || e.key === 'PageUp') { e.preventDefault(); show(index - 1); }
+    });
+    render();
+  })();
+</script>
+</body>
+</html>
