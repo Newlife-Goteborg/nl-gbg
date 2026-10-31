@@ -9,22 +9,32 @@
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg: #ffffff;
-    --ink: #0d0d0d;
-    --muted: #4a4f55;
-    --tint: #f1f5f5;
+    --bg: #fffaf3;
+    --ink: #111827;
+    --muted: #49576a;
+    --tint: #eefaf7;
     --accent: #0f4f55;
-    --blue: #3d5a8a;
-    --line: #d5dddd;
-    --mark: #cfe6e3;
-    --note-bg: #eef3f7;
+    --blue: #2f5ca8;
+    --line: #d8e6ea;
+    --mark: #ffe7a8;
+    --note-bg: #f6f3ff;
+    --warm: #ffb84d;
+    --coral: #ff7a59;
+    --mint: #46c7b6;
+    --purple: #6d66d9;
     --display: "Prospectus", Georgia, serif;
     --mono: "Space Mono", "Courier New", monospace;
     color-scheme: light;
   }
   * { box-sizing: border-box; }
   html, body { height: 100%; margin: 0; }
-  body { background: var(--bg); color: var(--ink); font-family: var(--mono); font-size: 16px; line-height: 1.75; overflow: hidden; }
+  body {
+    background:
+      radial-gradient(circle at top left, rgba(255,184,77,.25), transparent 18%),
+      radial-gradient(circle at bottom right, rgba(70,199,182,.2), transparent 20%),
+      linear-gradient(180deg, #fffdf9 0%, #fff8ef 100%);
+    color: var(--ink); font-family: var(--mono); font-size: 16px; line-height: 1.75; overflow: hidden;
+  }
   button { font: inherit; }
 
   .deck { position: relative; height: 100%; }
@@ -44,81 +54,105 @@
   h2 { font-size: clamp(2.2rem, 5vw, 3.6rem); max-width: 20ch; letter-spacing: -.01em; }
   h3 { font-size: 1.3rem; margin-bottom: .5rem; }
   p { margin: 0 0 1rem; color: var(--muted); }
-  .lead { font-size: 1.05rem; color: var(--ink); max-width: 38em; margin-bottom: 1.8rem; }
+  .lead { font-size: 1.08rem; color: var(--ink); max-width: 38em; margin-bottom: 1.8rem; }
 
   .split { display: grid; grid-template-columns: 1.1fr .9fr; gap: 3rem; align-items: center; }
   .split svg { width: 100%; height: auto; display: block; }
-  .art { background: var(--tint); border-radius: 4px; padding: 1.5rem; }
+  .art {
+    background: linear-gradient(135deg, rgba(255,255,255,.9), rgba(233,247,244,.8));
+    border: 1px solid rgba(15,79,85,.1);
+    border-radius: 22px;
+    padding: 1.5rem;
+    box-shadow: 0 18px 40px rgba(15,79,85,.12);
+  }
 
-  /* Cover: dark spotlight hero, like the church homepage */
   .cover {
     background:
-      radial-gradient(ellipse 35% 45% at 62% 40%, rgba(120,200,205,.55), transparent 70%),
-      linear-gradient(160deg, #3f6b80 0%, #1d3350 55%, #0f1d30 100%);
+      radial-gradient(circle at 75% 20%, rgba(255,184,77,.75), transparent 18%),
+      radial-gradient(circle at 14% 30%, rgba(70,199,182,.35), transparent 18%),
+      linear-gradient(160deg, #214f78 0%, #173d61 30%, #0f2c48 55%, #091b30 100%);
     color: #ffffff;
+    box-shadow: inset 0 0 0 1px rgba(255,255,255,.06);
   }
   .cover h1 { color: #ffffff; text-align: left; font-size: clamp(2rem, 5vw, 3.6rem); margin-bottom: 1rem; }
-  .cover .lead { color: #e7eff5; }
-  .cover .date { font-size: .85rem; letter-spacing: .12em; text-transform: uppercase; color: #c9d7e2; margin: 1.2rem 0 0; }
+  .cover .lead { color: #eef8ff; }
+  .cover .date { font-size: .85rem; letter-spacing: .12em; text-transform: uppercase; color: #cfe4f7; margin: 1.2rem 0 0; }
   .cover-label { font-size: .85rem; letter-spacing: .14em; text-transform: uppercase; font-weight: 700; color: #ffffff; margin: 2.2rem 0 .8rem; }
   .cover .art { background: rgba(255,255,255,.96); }
 
   .tiles { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin-top: .5rem; }
   .tile {
     display: grid; grid-template-columns: 3rem 1fr; gap: .9rem; align-items: start; text-align: left; cursor: pointer;
-    border: 0; background: #ffffff; color: var(--ink); border-radius: 4px; padding: 1.2rem 1.3rem;
-    transition: background .2s;
+    border: 0; background: linear-gradient(135deg, #ffffff 0%, #edf8f6 100%); color: var(--ink); border-radius: 18px; padding: 1.2rem 1.3rem;
+    transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    box-shadow: 0 10px 18px rgba(11,28,32,.08);
   }
-  .tile:hover { background: #dfeeed; }
-  .tile:focus-visible { outline: 3px solid #7fd0c8; outline-offset: 3px; }
-  .tile .ic { width: 3rem; height: 3rem; border-radius: 50%; background: var(--accent); display: grid; place-items: center; }
+  .tile:hover {
+    background: linear-gradient(135deg, #fff3d8 0%, #dffaf3 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 18px 24px rgba(15,79,85,.12);
+  }
+  .tile:focus-visible { outline: 3px solid #ffd76e; outline-offset: 3px; }
+  .tile .ic {
+    width: 3rem; height: 3rem; border-radius: 50%; background: linear-gradient(135deg, var(--warm), var(--mint));
+    display: grid; place-items: center; box-shadow: inset 0 0 0 2px rgba(255,255,255,.35);
+  }
   .tile .ic svg { width: 1.5rem; height: 1.5rem; }
   .tile .t { display: block; font-family: var(--display); font-weight: 700; font-size: 1.2rem; margin-bottom: .2rem; }
   .tile .d { display: block; color: var(--muted); font-size: .85rem; line-height: 1.5; }
 
-  /* Content */
   .cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; margin-top: 1.5rem; }
-  .card { background: var(--tint); border-radius: 4px; padding: 1.5rem 1.6rem; border-top: 0; }
+  .card {
+    background: linear-gradient(180deg, rgba(241,245,245,.92), rgba(255,255,255,.9));
+    border-radius: 18px; padding: 1.5rem 1.6rem; border-top: 0; border: 1px solid rgba(15,79,85,.08);
+    box-shadow: 0 12px 22px rgba(15,79,85,.06);
+  }
   .card p { margin-bottom: .6rem; font-size: .92rem; }
   .card p:last-child { margin-bottom: 0; }
   .card .why { color: var(--ink); font-weight: 700; }
   .tag {
     display: inline-block; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 700;
-    color: #ffffff; background: var(--accent); border-radius: 999px; padding: .2rem .8rem; margin-bottom: .8rem;
+    color: #ffffff; background: linear-gradient(135deg, var(--purple), var(--accent)); border-radius: 999px; padding: .2rem .8rem; margin-bottom: .8rem;
   }
-  .note { margin-top: 1.5rem; background: var(--note-bg); color: var(--ink); border-radius: 4px; padding: 1.3rem 1.6rem; font-size: .95rem; }
+  .note {
+    margin-top: 1.5rem; background: linear-gradient(135deg, rgba(246,243,255,.9), rgba(235,250,247,.9));
+    color: var(--ink); border-radius: 18px; padding: 1.3rem 1.6rem; font-size: .95rem;
+    border: 1px solid rgba(109,102,217,.12);
+    box-shadow: 0 12px 24px rgba(109,102,217,.06);
+  }
   .note strong { display: block; margin-bottom: .25rem; font-family: var(--display); font-size: 1.1rem; }
   .note p { color: var(--ink); margin: 0; }
   .note.neutral { background: var(--tint); }
   .note.neutral p { color: var(--muted); }
 
-  /* Key terms and decision points */
-  mark.key { background: var(--mark); color: var(--ink); font-weight: 700; padding: 0 .25em; border-radius: 2px; }
+  mark.key { background: linear-gradient(180deg, rgba(255,231,168,.85), rgba(255,231,168,.7)); color: var(--ink); font-weight: 700; padding: 0 .25em; border-radius: 3px; }
   .decision {
-    margin-top: 1.5rem; border: 2px solid var(--accent); border-radius: 4px; padding: 1.2rem 1.5rem;
-    background: var(--bg); display: flex; gap: 1rem; align-items: flex-start;
+    margin-top: 1.5rem; border: 2px solid rgba(15,79,85,.2); border-radius: 18px; padding: 1.2rem 1.5rem;
+    background: linear-gradient(135deg, rgba(255,255,255,.92), rgba(233,247,244,.86)); display: flex; gap: 1rem; align-items: flex-start;
+    box-shadow: 0 14px 26px rgba(15,79,85,.08);
   }
   .decision .badge {
-    flex: none; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; color: #ffffff; background: var(--accent);
-    border-radius: 999px; padding: .3rem .8rem; margin-top: .15rem; white-space: nowrap;
+    flex: none; font-size: .72rem; letter-spacing: .12em; text-transform: uppercase; font-weight: 700; color: #ffffff; background: linear-gradient(135deg, var(--coral), var(--warm));
+    border-radius: 999px; padding: .3rem .8rem; margin-top: .15rem; white-space: nowrap; box-shadow: 0 8px 14px rgba(255,122,89,.2);
   }
   .decision p { margin: 0; color: var(--ink); font-size: .95rem; }
 
-  /* Nav: black pill buttons, like the church site */
   .nav {
     position: fixed; left: 0; right: 0; bottom: 0; display: flex; align-items: center; justify-content: space-between;
-    gap: 1rem; padding: .9rem clamp(1rem, 5vw, 3rem); background: var(--bg); border-top: 1px solid var(--line);
+    gap: 1rem; padding: .9rem clamp(1rem, 5vw, 3rem); background: linear-gradient(180deg, rgba(255,255,255,.96), rgba(255,248,239,.98)); border-top: 1px solid var(--line);
+    backdrop-filter: blur(10px);
   }
   .nav button {
-    color: #ffffff; background: #111111; border: 0; border-radius: 999px;
+    color: #ffffff; background: linear-gradient(135deg, #1d1d1d 0%, #111111 100%); border: 0; border-radius: 999px;
     padding: .6rem 1.3rem; cursor: pointer; font-size: .8rem; letter-spacing: .1em; text-transform: uppercase; font-weight: 700;
+    box-shadow: 0 8px 18px rgba(17,17,17,.18);
   }
-  .nav button:hover:not(:disabled) { background: var(--accent); }
+  .nav button:hover:not(:disabled) { background: linear-gradient(135deg, var(--accent), var(--blue)); }
   .nav button:disabled { opacity: .3; cursor: default; }
-  .nav button:focus-visible, .tile:focus-visible, .dots button:focus-visible { outline: 3px solid #7fd0c8; outline-offset: 2px; }
+  .nav button:focus-visible, .tile:focus-visible, .dots button:focus-visible { outline: 3px solid #ffd76e; outline-offset: 2px; }
   .dots { display: flex; gap: .55rem; }
-  .dots button { width: 11px; height: 11px; border-radius: 50%; border: 0; background: var(--line); padding: 0; cursor: pointer; }
-  .dots button[aria-current="true"] { background: var(--accent); }
+  .dots button { width: 11px; height: 11px; border-radius: 50%; border: 0; background: var(--line); padding: 0; cursor: pointer; box-shadow: inset 0 0 0 2px rgba(255,255,255,.2); }
+  .dots button[aria-current="true"] { background: linear-gradient(135deg, var(--coral), var(--warm)); }
   .counter { color: var(--muted); font-size: .8rem; min-width: 4.5rem; text-align: center; letter-spacing: .08em; }
 
   @media (max-width: 860px) {
@@ -139,7 +173,7 @@
       <div class="split">
         <div>
           <h1>New Life Church Göteborg</h1>
-          <p class="lead">A simple plan for our website: how we would build it, where it would live, and which web address people would type in.</p>
+          <p class="lead">A bold vision for our church website: how we would build it, where it would live, and what web address would welcome people into our story.</p>
           <p class="date">Core Launch Team • October 2026</p>
         </div>
         <div class="art" aria-hidden="true">
@@ -192,14 +226,14 @@
         </button>
         <button class="tile" type="button" data-go="3">
           <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#0f4f55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5"/></svg></span>
-          <span><span class="t">A simpler, free option</span><span class="d">What it would cost us, and why we would still choose the first plan.</span></span>
+          <span><span class="t">A simpler, free option</span><span class="d">What it would cost us, and why we still choose the stronger path.</span></span>
         </button>
         <button class="tile" type="button" data-go="4">
           <span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#0f4f55" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3v18"/></svg></span>
-          <span><span class="t">Choosing the web address</span><span class="d">Decided: one main church page that links to each location's own site.</span></span>
+          <span><span class="t">Choosing the web address</span><span class="d">Decided: one main church page that links to each location’s own site.</span></span>
         </button>
       </div>
-      <div class="decision"><span class="badge">Direction</span><p>Overall: we have a clear website direction, with room for feedback and refinement as we move forward.</p></div>
+      <div class="decision"><span class="badge">Direction</span><p>Overall: we have a clear path forward, with room for feedback and refinement as we build the church’s digital front door.</p></div>
     </div>
   </section>
 
